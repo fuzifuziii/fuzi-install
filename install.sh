@@ -110,7 +110,7 @@ mount --mkdir "$EFI_PART" /mnt/boot/efi
 swapon "$SWAP_PART"
 
 echo "== Installing base system =="
-pacstrap -K /mnt base linux-zen linux-zen-headers intel-ucode networkmanager sudo grub efibootmgr neovim
+pacstrap -K /mnt base linux-zen linux-zen-headers linux-firmware intel-ucode networkmanager sudo grub efibootmgr neovim
 
 genfstab -U /mnt >>/mnt/etc/fstab
 
