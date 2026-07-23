@@ -31,8 +31,8 @@ if [[ "$CREATE_USER" =~ ^[Yy]$ ]]; then
   read -rp "Username: " NEWUSER
   useradd -m -G wheel "$NEWUSER"
   passwd "$NEWUSER"
-  echo "%wheel ALL=(ALL:ALL) ALL" >/etc/sudoers
-  chmod 440 /etc/sudoers
+  echo "%wheel ALL=(ALL:ALL) ALL" >/etc/sudoers.d/wheel
+  chmod 440 /etc/sudoers.d/wheel
 fi
 
 echo "== Bootloader =="
