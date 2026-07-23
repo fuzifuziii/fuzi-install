@@ -29,7 +29,7 @@ read -rp "Create a new user? [Y/n]: " CREATE_USER
 CREATE_USER="${CREATE_USER:-Y}"
 if [[ "$CREATE_USER" =~ ^[Yy]$ ]]; then
   read -rp "Username: " NEWUSER
-  useradd -mG wheel "$NEWUSER"
+  useradd -a -G wheel "$NEWUSER"
   passwd "$NEWUSER"
   echo "%wheel ALL=(ALL:ALL) ALL" >/etc/sudoers
   chmod 440 /etc/sudoers
