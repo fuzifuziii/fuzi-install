@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-# Runs inside arch-chroot, invoked by install.sh. Not meant to be run standalone
-# outside a chroot, since it edits /etc/* and installs GRUB to the ESP.
 set -euo pipefail
 
 echo "== Timezone =="
