@@ -36,8 +36,25 @@ if [[ "$CREATE_USER" =~ ^[Yy]$ ]]; then
 fi
 
 echo "== Bootloader =="
-grub-install
-grub-mkconfig -o /boot/grub/grub.cfg
+echo "1) grub"
+echo "2) refind"
+read -rp "Select bootloader [1]: " BOOTLOADER_CHOICE
+BOOTLOADER_CHOICE="${BOOTLOADER_CHOICE:-1}"
+case "$BOOTLOADER_CHOICE" in
+1)
+  pacman -S --noconfirm grub
+  grub-install
+  grub-mkconfig -o /boot/grub/grub.cfg
+  ;;
+2)
+  pacman -S --noconfirm refind
+  refind-install
+  ;;
+*)
+  echo "Unrecognized choice '$BOOTLOADER_CHOICE'" >&2
+  exit 1
+  ;;
+esac
 
 echo "== systemd-networkd / NetworkManager =="
 systemctl enable NetworkManager

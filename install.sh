@@ -109,8 +109,31 @@ mount --mkdir "$EFI_PART" /mnt/boot
 mount --mkdir "$EFI_PART" /mnt/boot/efi
 swapon "$SWAP_PART"
 
+echo
+echo "== CPU microcode =="
+CPU_VENDOR=$(grep -m1 vendor_id /proc/cpuinfo | awk '{print $3}')
+case "$CPU_VENDOR" in
+GenuineIntel) UCODE_DEFAULT="intel-ucode" ;;
+AuthenticAMD) UCODE_DEFAULT="amd-ucode" ;;
+*) UCODE_DEFAULT="intel-ucode" ;;
+esac
+echo "1) intel-ucode"
+echo "2) amd-ucode"
+echo "3) none"
+read -rp "Select microcode [detected: $UCODE_DEFAULT]: " UCODE_CHOICE
+case "$UCODE_CHOICE" in
+1) UCODE_PKG="intel-ucode" ;;
+2) UCODE_PKG="amd-ucode" ;;
+3) UCODE_PKG="" ;;
+"") UCODE_PKG="$UCODE_DEFAULT" ;;
+*)
+  echo "Unrecognized choice '$UCODE_CHOICE'" >&2
+  exit 1
+  ;;
+esac
+
 echo "== Installing base system =="
-pacstrap -K /mnt base linux-zen linux-zen-headers linux-firmware intel-ucode networkmanager sudo grub efibootmgr neovim
+pacstrap -K /mnt base linux-zen linux-zen-headers linux-firmware $UCODE_PKG networkmanager sudo efibootmgr neovim
 
 genfstab -U /mnt >>/mnt/etc/fstab
 
